@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "ekc-eshop": {
+      "type": "stdio",
+      "command": "ekc",
+      "args": ["mcp", "-g", "${workspaceFolder}/demo/out/eshop.graph.json"]
+    },
+    "ekc-fabrikam": {
+      "type": "stdio",
+      "command": "ekc",
+      "args": ["mcp", "-g", "${workspaceFolder}/demo/out/fabrikam.graph.json"]
+    }
+  }
+}

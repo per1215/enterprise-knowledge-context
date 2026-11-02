@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ekc-eshop": {
+      "command": "ekc",
+      "args": ["mcp", "-g", "demo/out/eshop.graph.json"]
+    },
+    "ekc-fabrikam": {
+      "command": "ekc",
+      "args": ["mcp", "-g", "demo/out/fabrikam.graph.json"]
+    }
+  }
+}

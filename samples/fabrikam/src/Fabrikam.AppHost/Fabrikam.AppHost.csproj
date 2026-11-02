@@ -1,0 +1,14 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Claims.Api\Claims.Api.csproj" />
+    <ProjectReference Include="..\Policy.Api\Policy.Api.csproj" />
+    <ProjectReference Include="..\Fraud.Worker\Fraud.Worker.csproj" />
+    <ProjectReference Include="..\Payments.Api\Payments.Api.csproj" />
+    <ProjectReference Include="..\Notifications.Worker\Notifications.Worker.csproj" />
+    <ProjectReference Include="..\Portal.Web\Portal.Web.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+# Fabrikam ownership
+/src/Portal.Web/          @fabrikam/digital-channels
+/src/Claims.Api/          @fabrikam/claims-team
+/src/Fraud.Worker/        @fabrikam/claims-team @fabrikam/risk
+/src/Policy.Api/          @fabrikam/policy-team
+/src/Payments.Api/        @fabrikam/finance-platform
+/src/Notifications.Worker/ @fabrikam/digital-channels

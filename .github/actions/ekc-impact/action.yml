@@ -1,0 +1,83 @@
+name: EKC blast radius
+description: Maps the repository with EKC and comments the pull request's blast radius (endpoints, callers, event consumers, data, rules, owners).
+branding:
+  icon: git-pull-request
+  color: orange
+inputs:
+  path:
+    description: Repository root to analyse.
+    default: .
+  overlay:
+    description: Optional overlay YAML (domains, processes, rules). Defaults to <path>/.ekc/overlay.yaml.
+    default: ''
+  base:
+    description: Base ref to diff against.
+    default: ${{ github.event.pull_request.base.sha }}
+  fail-on:
+    description: 'Fail the check at this risk level: "", medium or high.'
+    default: ''
+  comment:
+    description: Post or update a PR comment.
+    default: 'true'
+  github-token:
+    description: Token used to comment.
+    default: ${{ github.token }}
+outputs:
+  risk:
+    description: Low, Medium or High.
+    value: ${{ steps.impact.outputs.risk }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Build EKC
+      shell: bash
+      run: dotnet build "$GITHUB_ACTION_PATH/../../../src/Ekc.Cli/Ekc.Cli.csproj" -c Release -o "$RUNNER_TEMP/ekc" --nologo -v q
+
+    - name: Map the repository
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        overlay=()
+        if [ -n "${{ inputs.overlay }}" ]; then overlay=(--overlay "${{ inputs.overlay }}"); fi
+        dotnet "$RUNNER_TEMP/ekc/ekc.dll" map . "${overlay[@]}" -g "$RUNNER_TEMP/graph.json"
+
+    - name: Blast radius
+      id: impact
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        set +e
+        dotnet "$RUNNER_TEMP/ekc/ekc.dll" impact --diff "${{ inputs.base }}...HEAD" --pr-comment \
+          -g "$RUNNER_TEMP/graph.json" --out "$RUNNER_TEMP/impact.md" ${{ inputs.fail-on != '' && format('--fail-on {0}', inputs.fail-on) || '' }}
+        code=$?
+        risk=$(grep -oE '(Low|Medium|High) risk' "$RUNNER_TEMP/impact.md" | head -1 | cut -d' ' -f1)
+        echo "risk=$risk" >> "$GITHUB_OUTPUT"
+        cat "$RUNNER_TEMP/impact.md" >> "$GITHUB_STEP_SUMMARY"
+        echo "exit=$code" >> "$GITHUB_OUTPUT"
+
+    - name: Comment on the pull request
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR: ${{ github.event.pull_request.number }}
+        REPO: ${{ github.repository }}
+      run: |
+        id=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+          --jq '.[] | select(.body | startswith("<!-- ekc-impact -->")) | .id' | head -1)
+        if [ -n "$id" ]; then
+          gh api -X PATCH "repos/$REPO/issues/comments/$id" -F body=@"$RUNNER_TEMP/impact.md" > /dev/null
+        else
+          gh pr comment "$PR" --repo "$REPO" --body-file "$RUNNER_TEMP/impact.md"
+        fi
+
+    - name: Enforce risk threshold
+      if: steps.impact.outputs.exit == '3'
+      shell: bash
+      run: |
+        echo "::error::EKC blast radius is ${{ steps.impact.outputs.risk }} (threshold: ${{ inputs.fail-on }})"
+        exit 1

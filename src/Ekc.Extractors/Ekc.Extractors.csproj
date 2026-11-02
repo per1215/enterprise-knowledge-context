@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Builds the system graph from source. Syntax-only Roslyn analysis: no restore or build of the target repository. -->
+  <PropertyGroup>
+    <RootNamespace>Ekc.Extractors</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ekc.Graph\Ekc.Graph.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Ekc.Tests" />
+  </ItemGroup>
+</Project>

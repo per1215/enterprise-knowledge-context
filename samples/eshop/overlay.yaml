@@ -1,0 +1,44 @@
+# Business knowledge for dotnet/eShop, curated from its documentation and code.
+domains:
+  - name: Ordering
+    description: Order placement, validation, payment and shipping
+    services: [ordering-api, order-processor, payment-processor]
+  - name: Catalog
+    services: [catalog-api]
+  - name: Shopping
+    services: [basket-api, webapp]
+  - name: Partner Integration
+    services: [webhooks-api, webhooksclient]
+
+rules:
+  - name: Orders wait for a grace period before stock validation
+    description: Submitted orders can be cancelled during the grace period; afterwards they are sent for stock validation.
+    enforcedBy: [GracePeriodManagerService.CheckConfirmedGracePeriodOrders]
+  - name: An order can only be shipped after it is paid
+    enforcedBy: [Order.SetShippedStatus]
+  - name: Orders can't be cancelled once paid or shipped
+    enforcedBy: [Order.SetCancelledStatus]
+
+processes:
+  - name: Place an order
+    domain: Ordering
+    description: Checkout in the web app creates the order and clears the basket.
+    steps:
+      - "webapp: GET /"
+      - "ordering-api: POST /api/orders"
+      - "topic: OrderStartedIntegrationEvent"
+      - "topic: OrderStatusChangedToSubmittedIntegrationEvent"
+  - name: Validate stock and take payment
+    domain: Ordering
+    steps:
+      - "topic: GracePeriodConfirmedIntegrationEvent"
+      - "topic: OrderStatusChangedToAwaitingValidationIntegrationEvent"
+      - "topic: OrderStockConfirmedIntegrationEvent"
+      - "topic: OrderStatusChangedToStockConfirmedIntegrationEvent"
+      - "topic: OrderPaymentSucceededIntegrationEvent"
+      - "topic: OrderStatusChangedToPaidIntegrationEvent"
+  - name: Ship an order
+    domain: Ordering
+    steps:
+      - "ordering-api: PUT /api/orders/ship"
+      - "topic: OrderStatusChangedToShippedIntegrationEvent"

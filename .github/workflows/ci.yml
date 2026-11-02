@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore Ekc.slnx --locked-mode
+      - run: dotnet build Ekc.slnx -c Release --no-restore -p:ContinuousIntegrationBuild=true
+      - run: dotnet test --solution Ekc.slnx -c Release --no-build
+      - name: Smoke test on the Fabrikam sample
+        run: |
+          dotnet src/Ekc.Cli/bin/Release/net10.0/ekc.dll map samples/fabrikam -g fabrikam.json
+          dotnet src/Ekc.Cli/bin/Release/net10.0/ekc.dll flow "Submit a claim" -g fabrikam.json
+          dotnet src/Ekc.Cli/bin/Release/net10.0/ekc.dll impact ClaimValidator.EnsureWithinCoverage -g fabrikam.json

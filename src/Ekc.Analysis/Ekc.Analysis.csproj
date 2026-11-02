@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Queries over the system graph: flows, impact, service descriptions, exports and renderers. -->
+  <PropertyGroup>
+    <RootNamespace>Ekc.Analysis</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ekc.Graph\Ekc.Graph.csproj" />
+  </ItemGroup>
+</Project>

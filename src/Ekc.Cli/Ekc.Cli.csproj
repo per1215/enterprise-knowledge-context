@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Ekc.Cli</RootNamespace>
+    <AssemblyName>ekc</AssemblyName>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>ekc</ToolCommandName>
+    <PackageId>Ekc.Cli</PackageId>
+    <Description>EKC: the open-source, self-hosted system map for AI agents.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="ModelContextProtocol" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ekc.Extractors\Ekc.Extractors.csproj" />
+    <ProjectReference Include="..\Ekc.Analysis\Ekc.Analysis.csproj" />
+  </ItemGroup>
+</Project>

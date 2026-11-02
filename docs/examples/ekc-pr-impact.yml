@@ -1,0 +1,19 @@
+# Copy to .github/workflows/ekc-impact.yml in the repository you want to analyse.
+name: ekc-impact
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  blast-radius:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # the diff needs the base commit
+      - uses: <your-org>/enterprise-knowledge-context/.github/actions/ekc-impact@main
+        with:
+          fail-on: ''      # set to "high" to block risky changes

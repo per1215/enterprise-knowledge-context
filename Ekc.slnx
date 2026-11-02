@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ekc.Graph/Ekc.Graph.csproj" />
+    <Project Path="src/Ekc.Extractors/Ekc.Extractors.csproj" />
+    <Project Path="src/Ekc.Analysis/Ekc.Analysis.csproj" />
+    <Project Path="src/Ekc.Cli/Ekc.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Ekc.Tests/Ekc.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The system graph model and its JSON store. No dependencies. -->
+  <PropertyGroup>
+    <RootNamespace>Ekc.Graph</RootNamespace>
+  </PropertyGroup>
+</Project>
