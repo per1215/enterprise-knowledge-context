@@ -1,0 +1,30 @@
+# Curated business knowledge that code cannot express. Steps reference endpoints, topics or methods.
+domains:
+  - name: Claims
+    description: First notice of loss through settlement
+    services: [claims-api, fraud-worker, payments-api]
+  - name: Policy Administration
+    services: [policy-api]
+  - name: Digital Channels
+    services: [portal-web, notifications-worker]
+
+rules:
+  - name: Fraud score above 0.8 rejects the claim
+    description: Claims scored above 0.8 are rejected automatically and routed to the special investigations unit.
+    enforcedBy: [FraudScorer.Score]
+
+processes:
+  - name: Submit a claim
+    domain: Claims
+    description: Customer submits a claim in the portal; coverage is checked; fraud screening runs asynchronously.
+    steps:
+      - "portal-web: POST /claims"
+      - "claims-api: POST /api/claims"
+      - "topic: ClaimSubmittedIntegrationEvent"
+      - "topic: ClaimFraudCheckedIntegrationEvent"
+  - name: Approve and pay a claim
+    domain: Claims
+    steps:
+      - "claims-api: POST /api/claims/{id}/approve"
+      - "topic: ClaimApprovedIntegrationEvent"
+      - "topic: ClaimPaidIntegrationEvent"

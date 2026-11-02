@@ -11,7 +11,9 @@ dist/
 *.tfstate
 *.tfstate.*
 .terraform/
-.ekc/
+# Generated maps; overlays are source and must be committed
+.ekc/*
+!.ekc/overlay.yaml
 TestResults/
 samples/external/
 *.graph.json
