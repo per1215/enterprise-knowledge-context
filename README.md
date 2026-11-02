@@ -23,9 +23,23 @@ dotnet run --project src/Ekc.Cli -- mcp            # for Copilot / Cursor / Clau
 | `.github/actions/ekc-impact` | PR blast-radius action |
 | `scripts/demo-setup.sh`, `scripts/demo.sh` | one-time demo preparation and guided walkthrough |
 
-The architecture documents below describe the longer-term platform. Current focus: .NET depth, an open accuracy benchmark for impact analysis, then Java support.
+Next: an open accuracy benchmark for impact analysis, broader .NET framework coverage, then multi-repo maps and Java (see the [implementation plan](docs/implementation-plan.md)).
 
 ## Documents
+
+**EKC as built (v0.1)**
+
+| | |
+|---|---|
+| [Product plan](docs/product-plan.md) | vision, problem, users, principles, scope by release, success metrics |
+| [Architecture (as built)](docs/architecture/ekc-architecture.md) | C4 context/container/component/code diagrams, graph schema, runtime views, algorithms, decisions, limits |
+| [C4 model (Structurizr DSL)](docs/architecture/ekc-workspace.dsl) | the same model for Structurizr Lite |
+| [Implementation plan](docs/implementation-plan.md) | v0.1 → v1.0 work packages, acceptance criteria, estimates, risks |
+| [Development guide](docs/development-guide.md) | build, test, layout, conventions, adding extractors/tools/commands, release |
+| [Getting started](docs/getting-started.md) | install, map, flow, impact, PR action, MCP setup, overlay, limits |
+| [Demo runbook](docs/demo-runbook.md) | POC demo: setup, 10-minute script, Q&A, fallbacks |
+
+**Target platform (vision)**
 
 | | |
 |---|---|
@@ -37,8 +51,6 @@ The architecture documents below describe the longer-term platform. Current focu
 | [6. Security](docs/architecture/06-security.md) | threat model, Keycloak/Entra, RBAC + OpenFGA ReBAC/ABAC, isolation, secrets, audit |
 | [7. Code intelligence and VS Code](docs/architecture/07-code-intelligence-and-vscode.md) | repository indexing, code assistant APIs, extension design |
 | [8. Deployment and operations](docs/architecture/08-deployment-and-operations.md) | profiles, repo layout, IaC, laptop memory budget, ops |
-| [Demo runbook](docs/demo-runbook.md) | POC demo on this laptop: setup, 10-minute script, Q&A, fallbacks |
-| [Getting started](docs/getting-started.md) | install, map, flow, impact, PR action, MCP setup, overlay, limits |
 
 ## At a glance
 

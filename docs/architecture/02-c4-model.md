@@ -200,5 +200,5 @@ sequenceDiagram
   API->>FIM: FIM prompt (prefix + retrieved snippets + suffix), max 64–128 tokens
   FIM-->>API: Completion
   API-->>EXT: Completion (+ trace id)
-  EXT-->>ED: Ghost text; accept/reject telemetry (no code stored by default)
+  EXT-->>ED: Ghost text, accept/reject telemetry (no code stored by default)
 ```
